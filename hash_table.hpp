@@ -31,4 +31,6 @@ bool insert(HashMap *hmap, const char *key, const char *value);
 
 void printMap(HashMap *hmap);
 
+char *get(HashMap *map, const char *key);
+
 #endif

@@ -14,7 +14,7 @@ HashNode *initHashNode(const char *key, const char *value)
     return (hNode);
 }
 
-HashMap *initHashMap(unsigned long size)
+HashMap *initHashMap(unsigned long int size)
 {
     HashMap *hMap;
     if (size <= 0)
@@ -89,4 +89,15 @@ void printMap(HashMap *hmap)
             printf("\t\"%s\" : \"%s\"\n", node->key, node->value);
     }
     printf("}\n");
+}
+
+char *get(HashMap *map, const char *key)
+{
+    if (!map || !key)
+        return (NULL);
+    unsigned long hIndex = key_index(key, map->size);
+    if (map->array[hIndex] == NULL)
+        return (NULL);
+    else
+        return map->array[hIndex]->value;
 }
