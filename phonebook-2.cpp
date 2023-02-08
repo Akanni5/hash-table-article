@@ -13,5 +13,7 @@ int main()
     printf("Okay. Dad's new number is \"01000222\", very easy to recall.\nI can insert it in.\n");
     insert(phonebook, "dada 2", "01000222");
     printMap(phonebook);
+    clear(phonebook);
+    phonebook = NULL;
     return 0;
 }

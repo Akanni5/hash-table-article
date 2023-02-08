@@ -14,4 +14,7 @@ int main()
     remove(phonebook, "dada 2");
     insert(phonebook, "dada", dada_no);
     printMap(phonebook);
+    clear(phonebook);
+    phonebook = NULL;
+    return 0;
 }

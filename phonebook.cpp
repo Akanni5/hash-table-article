@@ -9,4 +9,8 @@ int main()
     // OMG!!!! I have to change mama's phone no. she gat a new one! 😲
     insert(phonebook, "mama", "08065354");
     printMap(phonebook);
+    printf("%p\n", &phonebook->size);
+    clear(phonebook);
+    phonebook = NULL;
+    return 0;
 }

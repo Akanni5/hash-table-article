@@ -78,7 +78,7 @@ bool insert(HashMap *hmap, const char *key, const char *value)
 
 void printMap(HashMap *hmap)
 {
-    if (!hmap)
+    if (hmap == NULL || hmap->array == NULL)
         return;
     printf("{\n");
     for (int i = 0; i < hmap->size; i++)
@@ -127,12 +127,15 @@ void clear(struct HashMap *map)
     for (i = 0; i < map->size; i++)
     {
         node = map->array[i];
-        free(node->key);
-        free(node->value);
-        free(node);
+        if (node){
+            free(node->key);
+            free(node->value);
+            free(node);
+        }
     }
 
     free(map->array);
     free(map);
+    map = NULL;
     return;
 }
