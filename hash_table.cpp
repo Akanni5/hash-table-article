@@ -116,3 +116,23 @@ bool remove(struct HashMap *map, const char *key)
     }
     return true;
 }
+
+void clear(struct HashMap *map)
+{
+    unsigned long int i;
+    HashNode *node;
+
+    if (!map) return;
+
+    for (i = 0; i < map->size; i++)
+    {
+        node = map->array[i];
+        free(node->key);
+        free(node->value);
+        free(node);
+    }
+
+    free(map->array);
+    free(map);
+    return;
+}
