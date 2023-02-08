@@ -34,5 +34,5 @@ void printMap(HashMap *hmap);
 
 const char *get(HashMap *map, const char *key);
 bool remove(struct HashMap *map, const char *key);
-
+void clear(HashMap *map);
 #endif
