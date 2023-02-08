@@ -11,6 +11,7 @@ HashNode *initHashNode(const char *key, const char *value)
         return (NULL);
     hNode->key = strdup(key);
     hNode->value = strdup(value);
+    hNode->next = NULL;
     return (hNode);
 }
 
@@ -65,14 +66,23 @@ bool insert(HashMap *hmap, const char *key, const char *value)
     }
     // if the key already exists I'll replace the value
     // by deleting it and duplicating the new value.
-    if (strcmp(hmap->array[hIndex]->key, key) == 0)
+    node = hmap->array[hIndex];
+    while (node)
     {
-        node = NULL;
-        node = hmap->array[hIndex];
-        free(node->value);
-        node->value = NULL;
-        node->value = strdup(value);
+        if (strcmp(node->key, key) == 0)
+        {
+            free(node->value);
+            node->value = strdup(node->value);
+            return true;
+        }
+        node = node->next;
     }
+    // at this point, the hash node for the hash key does not exist. though, the hash key exists.
+    // I'll add the new node to the head.
+    node = initHashNode(key, value);
+    if (!node) return false;
+    node->next = hmap->array[hIndex];
+    hmap->array[hIndex] = node;
     return true;
 }
 
@@ -84,21 +94,28 @@ void printMap(HashMap *hmap)
     for (int i = 0; i < hmap->size; i++)
     {
         struct HashNode *node = hmap->array[i];
-        if (node)
+        while (node)
+        {
             printf("\t\"%s\" : \"%s\"\n", node->key, node->value);
+            node = node->next;
+        }
     }
     printf("}\n");
 }
 
-char *get(HashMap *map, const char *key)
+const char *get(HashMap *map, const char *key)
 {
     if (!map || !key)
         return (NULL);
     unsigned long hIndex = key_index(key, map->size);
-    if (map->array[hIndex] == NULL)
-        return (NULL);
-    else
-        return map->array[hIndex]->value;
+    HashNode *node = map->array[hIndex];
+    while (node)
+    {
+        if (strcmp(node->key, key) == 0)
+            return node->value;
+        node = node->next;
+    }
+    return (NULL);
 }
 
 bool remove(struct HashMap *map, const char *key)
@@ -106,13 +123,31 @@ bool remove(struct HashMap *map, const char *key)
     if (!map || !key)
         return false;
     unsigned long hIndex = key_index(key, map->size);
-    struct HashNode *hnode = map->array[hIndex];
-    if (hnode)
+    HashNode *hnode = map->array[hIndex];
+    HashNode *next = NULL;
+    // if at the beginning.
+    if (hnode && strcmp(hnode->key, key) == 0)
     {
+        next = hnode->next;
         free(hnode->key);
         free(hnode->value);
         free(hnode);
-        map->array[hIndex] = NULL;
+        map->array[hIndex] = next;
+        return true;
     }
-    return true;
+    next = hnode->next;
+    while (next)
+    {
+        if (strcmp(next->key, key) == 0)
+        {
+            hnode->next = next->next;
+            free(next->key);
+            free(next->value);
+            free(next);
+            return true;
+        }
+        hnode = next;
+        next = next->next;
+    }
+    return false;
 }

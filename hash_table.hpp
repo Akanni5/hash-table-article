@@ -9,12 +9,13 @@ struct HashNode
 {
     char *key;
     char *value;
+    struct HashNode *next;
 };
 
 
 struct HashMap
 {
-    unsigned long size;
+    unsigned long int size;
     HashNode **array;
 };
 
@@ -31,7 +32,7 @@ bool insert(HashMap *hmap, const char *key, const char *value);
 
 void printMap(HashMap *hmap);
 
-char *get(HashMap *map, const char *key);
+const char *get(HashMap *map, const char *key);
 bool remove(struct HashMap *map, const char *key);
 
 #endif
